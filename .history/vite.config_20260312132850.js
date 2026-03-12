@@ -6,6 +6,5 @@ import vue from '@vitejs/plugin-vue'
 //   plugins: [vue()],
 // })
 export default defineConfig({
-  base: "/video-coupon-frontend/",
-  plugins: [vue()],
+  base: "/video-coupon-frontend/"
 })
