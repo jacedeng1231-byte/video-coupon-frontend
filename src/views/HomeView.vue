@@ -1,16 +1,30 @@
 <template>
 
-<h2>活動中心</h2>
+<div class="container mt-4">
 
-<div>
+  <h2 class="text-center mb-4">LINE 活動中心</h2>
 
-  <router-link to="/videos">
-    <button>觀看影片</button>
-  </router-link>
+  <div class="row g-3">
 
-  <router-link to="/coupons">
-    <button>我的優惠券</button>
-  </router-link>
+    <div class="col-6">
+      <router-link to="/videos" class="text-decoration-none">
+        <div class="card text-center shadow-sm p-3">
+          <h4>🎬</h4>
+          <p>觀看影片</p>
+        </div>
+      </router-link>
+    </div>
+
+    <div class="col-6">
+      <router-link to="/coupons" class="text-decoration-none">
+        <div class="card text-center shadow-sm p-3">
+          <h4>🎁</h4>
+          <p>我的優惠券</p>
+        </div>
+      </router-link>
+    </div>
+
+  </div>
 
 </div>
 
