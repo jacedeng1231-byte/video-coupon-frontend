@@ -25,7 +25,7 @@ export default {
         if (!profile) return;
       }
 
-      console.log("LINE profile:", profile);
+      // console.log("LINE profile:", profile);
       this.user = profile;
 
       const res = await api.post("/users/login", {
@@ -63,7 +63,7 @@ export default {
         <div class="collapse navbar-collapse" id="navbarNav">
           <div class="navbar-nav me-auto">
             <router-link class="nav-link" to="/dashboard"> 後台 </router-link>
-            <router-link class="nav-link" to="/videos"> 影片 </router-link>
+            <router-link class="nav-link" to="/videos"> 看片領券 </router-link>
             <router-link class="nav-link" to="/coupons"> 我的優惠券 </router-link>
           </div>
 

@@ -156,8 +156,8 @@ export default {
             </td>
             <td>
               <div class="small">
-                <div>👀 觀看：<strong>{{ v.totalViews || 0 }}</strong></div>
-                <div>🎁 領取：<strong>{{ v.totalClaims || 0 }}</strong></div>
+                <div>觀看：<strong>{{ v.totalViews || 0 }}</strong></div>
+                <div>領取：<strong>{{ v.totalClaims || 0 }}</strong></div>
               </div>
             </td>
             <td>{{ v.rewardCoupon?.title || "無" }}</td>

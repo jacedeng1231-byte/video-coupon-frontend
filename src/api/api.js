@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "https://video-coupon-backend.onrender.com/api"
+  baseURL: import.meta.env.DEV ? "http://localhost:3000/api" : "https://video-coupon-backend.onrender.com/api"
 })
 
 export default api

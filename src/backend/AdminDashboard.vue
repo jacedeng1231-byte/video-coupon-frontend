@@ -22,6 +22,16 @@
           </div>
         </router-link>
       </div>
+
+      <div class="col-md-4">
+        <router-link to="/dashboard/users" class="text-decoration-none">
+          <div class="card text-center p-4 shadow-sm">
+            <h4>👥</h4>
+
+            <p>會員管理</p>
+          </div>
+        </router-link>
+      </div>
     </div>
   </div>
 
