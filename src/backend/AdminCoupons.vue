@@ -110,7 +110,9 @@ export default {
           placeholder="最大使用次數"
           v-model="newCoupon.maxUse"
         />
-        <button class="btn btn-primary" @click="createCoupon">新增優惠券</button>
+        <button class="btn btn-primary" @click="createCoupon">
+          新增優惠券
+        </button>
       </div>
       <div v-else>
         <input
@@ -145,47 +147,57 @@ export default {
     </div>
 
     <!-- 列表 -->
-    <table class="table table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>標題</th>
-          <th>代碼</th>
-          <th>到期日</th>
-          <th>總發放次數</th>
-          <th>使用進度</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="c in coupons" :key="c._id">
-          <td>{{ c.title }}</td>
-          <td><code>{{ c.code }}</code></td>
-          <td>{{ new Date(c.expireDate).toLocaleDateString() }}</td>
-          <td>{{ c.maxUse }}</td>
-          <td>
-            <span :class="c.usedCount >= c.maxUse && c.maxUse > 0 ? 'text-danger fw-bold' : ''">
-              {{ c.usedCount || 0 }} / {{ c.maxUse }}
-            </span>
-          </td>
-          <td>
-            <button
-              class="btn btn-sm btn-outline-primary me-2"
-              @click="editCoupon(c)"
-            >
-              修改
-            </button>
-            <button
-              class="btn btn-sm btn-outline-danger"
-              @click="deleteCoupon(c._id)"
-            >
-              刪除
-            </button>
-          </td>
-        </tr>
-        <tr v-if="coupons.length === 0">
-          <td colspan="5" class="text-center text-muted">目前無優惠券</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>標題</th>
+            <th>代碼</th>
+            <th>到期日</th>
+            <th>總發放次數</th>
+            <th>使用進度</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="c in coupons" :key="c._id">
+            <td>{{ c.title }}</td>
+            <td>
+              <code>{{ c.code }}</code>
+            </td>
+            <td>{{ new Date(c.expireDate).toLocaleDateString() }}</td>
+            <td>{{ c.maxUse }}</td>
+            <td>
+              <span
+                :class="
+                  c.usedCount >= c.maxUse && c.maxUse > 0
+                    ? 'text-danger fw-bold'
+                    : ''
+                "
+              >
+                {{ c.usedCount || 0 }} / {{ c.maxUse }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-outline-primary me-2"
+                @click="editCoupon(c)"
+              >
+                修改
+              </button>
+              <button
+                class="btn btn-sm btn-outline-danger"
+                @click="deleteCoupon(c._id)"
+              >
+                刪除
+              </button>
+            </td>
+          </tr>
+          <tr v-if="coupons.length === 0">
+            <td colspan="5" class="text-center text-muted">目前無優惠券</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>

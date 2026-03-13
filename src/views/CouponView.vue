@@ -1,39 +1,75 @@
 <template>
   <div class="container mt-4">
     <h2 class="mb-4">我的優惠券</h2>
-    
+
     <div v-if="loading" class="text-center mt-5">
       <div class="spinner-border text-success"></div>
       <p>載入優惠券中...</p>
     </div>
 
     <div v-else>
-      <div v-for="c in coupons" :key="c._id" class="card mb-3 border-success">
-        <div class="card-body">
-          <h5 class="card-title">
-            {{ c.couponId.title }}
-          </h5>
+      <div class="row">
+        <div
+          v-for="c in coupons"
+          :key="c._id"
+          class="col-12 col-md-6 col-lg-4 mb-4"
+        >
+          <div class="card h-100 border-success shadow-sm">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title fw-bold">
+                {{ c.couponId.title }}
+              </h5>
 
-          <p class="card-text">
-            折扣碼：
-            <strong>{{ c.couponId.code }}</strong>
-          </p>
+              <p class="card-text">
+                折扣碼：
+                <code class="fs-5">{{ c.couponId.code }}</code>
+              </p>
 
-          <p class="text-muted">
-            到期日：
-            {{ new Date(c.couponId.expireDate).toLocaleDateString() }}
-          </p>
+              <p class="text-muted small mb-auto">
+                到期日：
+                {{ new Date(c.couponId.expireDate).toLocaleDateString() }}
+              </p>
 
-          <button 
-            v-if="!c.isUsed" 
-            class="btn btn-success w-100 mt-2"
-            @click="useCoupon(c.couponId._id)"
-          >
-            使用優惠券
-          </button>
-          <button v-else class="btn btn-secondary w-100 mt-2" disabled>
-            已使用
-          </button>
+              <!-- 已使用狀態 -->
+              <button
+                v-if="c.isUsed"
+                class="btn btn-secondary w-100 mt-3"
+                disabled
+              >
+                已使用
+              </button>
+
+              <!-- 已過期狀態 -->
+              <button
+                v-else-if="new Date(c.couponId.expireDate) < new Date()"
+                class="btn btn-danger w-100 mt-3"
+                disabled
+              >
+                已過期
+              </button>
+
+              <!-- 已用完狀態 (次數上限) -->
+              <button
+                v-else-if="
+                  c.couponId.maxUse > 0 &&
+                  c.couponId.usedCount >= c.couponId.maxUse
+                "
+                class="btn btn-danger w-100 mt-3"
+                disabled
+              >
+                已被用完
+              </button>
+
+              <!-- 可使用狀態 -->
+              <button
+                v-else
+                class="btn btn-success w-100 mt-3 shadow-sm"
+                @click="useCoupon(c.couponId._id)"
+              >
+                使用優惠券
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -79,7 +115,7 @@ export default {
         console.error(err);
         alert(err.response?.data?.message || "使用失敗");
       }
-    }
+    },
   },
   mounted() {
     this.loadCoupons();
@@ -88,10 +124,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  padding: 20px;
-}
-
 .coupon-card {
   border: 2px dashed #06c755;
   padding: 15px;

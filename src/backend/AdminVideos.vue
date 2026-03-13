@@ -44,7 +44,7 @@ export default {
     editVideo(video) {
       this.editingVideo = { ...video };
       // Keep only ID for select binding if rewardCoupon is populated
-      if (typeof this.editingVideo.rewardCoupon === 'object') {
+      if (typeof this.editingVideo.rewardCoupon === "object") {
         this.editingVideo.rewardCoupon = this.editingVideo.rewardCoupon._id;
       }
     },
@@ -130,48 +130,57 @@ export default {
           </option>
         </select>
         <div class="d-flex gap-2">
-          <button class="btn btn-success" @click="updateVideo">
-            儲存修改
-          </button>
+          <button class="btn btn-success" @click="updateVideo">儲存修改</button>
           <button class="btn btn-secondary" @click="cancelEdit">取消</button>
         </div>
       </div>
     </div>
 
     <!-- 列表 -->
-    <table class="table table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>標題</th>
-          <th>YouTube ID</th>
-          <th>獎勵優惠券</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="v in videos" :key="v._id">
-          <td>{{ v.title }}</td>
-          <td><code>{{ v.youtubeId }}</code></td>
-          <td>{{ v.rewardCoupon?.title || '無' }}</td>
-          <td>
-            <button
-              class="btn btn-sm btn-outline-primary me-2"
-              @click="editVideo(v)"
-            >
-              修改
-            </button>
-            <button
-              class="btn btn-sm btn-outline-danger"
-              @click="deleteVideo(v._id)"
-            >
-              刪除
-            </button>
-          </td>
-        </tr>
-        <tr v-if="videos.length === 0">
-          <td colspan="4" class="text-center text-muted">目前無影片</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>標題</th>
+            <th>YouTube ID</th>
+            <th>行為統計</th>
+            <th>獎勵優惠券</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="v in videos" :key="v._id">
+            <td>{{ v.title }}</td>
+            <td>
+              <code>{{ v.youtubeId }}</code>
+            </td>
+            <td>
+              <div class="small">
+                <div>👀 觀看：<strong>{{ v.totalViews || 0 }}</strong></div>
+                <div>🎁 領取：<strong>{{ v.totalClaims || 0 }}</strong></div>
+              </div>
+            </td>
+            <td>{{ v.rewardCoupon?.title || "無" }}</td>
+            <td>
+              <button
+                class="btn btn-sm btn-outline-primary me-2"
+                @click="editVideo(v)"
+              >
+                修改
+              </button>
+              <button
+                class="btn btn-sm btn-outline-danger"
+                @click="deleteVideo(v._id)"
+              >
+                刪除
+              </button>
+            </td>
+          </tr>
+          <tr v-if="videos.length === 0">
+            <td colspan="4" class="text-center text-muted">目前無影片</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
