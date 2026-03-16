@@ -25,37 +25,38 @@ export default {
 .page-title-container {
   display: flex;
   align-items: baseline;
-  gap: 15px;
-  border-bottom: 4px solid var(--retro-dark);
-  padding-bottom: 10px;
+  gap: 12px;
+  border-bottom: 2px solid var(--app-border);
+  padding-bottom: 12px;
+  margin-top: 8px;
 }
 
 .page-title-main {
-  color: var(--retro-primary);
-  font-family: var(--retro-font-display);
-  font-size: 2.5rem;
-  letter-spacing: 2px;
+  color: var(--app-primary);
+  font-size: 1.8rem;
+  font-weight: 800;
   margin: 0;
-  text-shadow: none; /* Remove global text shadow */
+  letter-spacing: -0.5px;
 }
 
 .page-title-sub {
-  color: var(--retro-accent);
-  font-family: var(--retro-font-mono);
-  font-size: 1.2rem;
-  font-weight: 900;
-  letter-spacing: 1px;
+  color: var(--app-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  background-color: var(--retro-dark);
-  padding: 4px 10px;
-  box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
 }
 
 @media (max-width: 576px) {
   .page-title-container {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 4px;
+    border-bottom: 1px solid var(--app-border);
+  }
+  
+  .page-title-main {
+    font-size: 1.5rem;
   }
 }
 </style>

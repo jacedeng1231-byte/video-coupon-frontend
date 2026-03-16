@@ -1,26 +1,37 @@
-/* --- RETRO POP THEME --- */
+/* --- MODERN MOBILE-FIRST THEME --- */
 
 :root {
-  /* Retro Pop Color Palette */
-  --retro-bg: #FFF4D6;      /* Cream */
-  --retro-primary: #018AC8; /* Vibrant Blue */
-  --retro-accent: #FD540B;  /* Vibrant Orange */
-  --retro-dark: #1A1A1A;    /* Almost Black for high contrast borders/text */
-  --retro-text: #1A1A1A;
-  --retro-text-light: #FFF4D6;
-  --retro-danger: #e91e63;
-  --retro-success: #00c853;
+  /* Core Palette */
+  --app-bg: #FFF4D6;              /* Cream Background (Retained) */
+  --app-surface: #FFFFFF;         /* White Cards & Panels */
+  --app-primary: #2F80ED;         /* Trust/Action Blue */
+  --app-primary-hover: #1b63c6;
+  --app-accent: #FF6B00;          /* Conversion Orange */
+  --app-accent-hover: #e05e00;
   
-  --retro-font-mono: 'Courier New', Courier, monospace;
-  --retro-font-display: 'VT323', monospace;
+  /* Text & Borders */
+  --app-text-main: #333333;       /* Main readable text */
+  --app-text-muted: #888888;      /* Secondary text */
+  --app-text-light: #FFFFFF;      /* Text on dark buttons */
+  --app-border: #EAEAEA;          /* Subtle dividers */
+  
+  /* Semantic */
+  --app-danger: #EB5757;
+  --app-success: #27AE60;
+  
+  /* Soft UI Shadows */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
 
-  font-family: var(--retro-font-mono);
+  /* Native Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+  font-family: var(--font-sans);
   line-height: 1.5;
-  font-weight: bold;
-
   color-scheme: light;
-  color: var(--retro-text);
-  background-color: var(--retro-bg);
+  color: var(--app-text-main);
+  background-color: var(--app-bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -32,188 +43,169 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  /* Cream background with subtle dotted grid Pattern */
-  background-color: var(--retro-bg);
-  background-image: radial-gradient(var(--retro-primary) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-color: var(--app-bg);
 }
 
-h1, h3, h4, h5, h6 {
-  font-family: var(--retro-font-display);
-  letter-spacing: 2px;
-  color: var(--retro-primary);
-  text-shadow: 2px 2px 0px var(--retro-accent);
-  text-transform: uppercase;
-  font-weight: normal;
-}
-
-h2 {
-  font-family: var(--retro-font-display);
-  letter-spacing: 2px;
-  color: var(--retro-primary);
-  text-transform: uppercase;
-  font-weight: normal;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--app-text-main);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 a {
-  font-weight: 900;
-  color: var(--retro-primary);
+  color: var(--app-primary);
   text-decoration: none;
-  transition: all 0.1s;
+  transition: opacity 0.2s;
 }
 
 a:hover {
-  color: var(--retro-accent);
+  opacity: 0.8;
 }
 
 /* --- OVERRIDE BOOTSTRAP DEFAULTS --- */
 
 /* App Container */
 #app {
-  max-width: 1280px;
+  max-width: 800px; /* Constrain for mobile-first feel even on desktop */
   margin: 0 auto;
 }
 
-/* Retro Pop Card / Panel style */
+/* Soft UI Cards */
 .card, .bg-light, .bg-white {
-  background-color: var(--retro-bg) !important;
-  color: var(--retro-text) !important;
-  border: 4px solid var(--retro-primary) !important;
-  border-radius: 0px !important;
-  box-shadow: 6px 6px 0px var(--retro-primary) !important;
-  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: var(--app-surface) !important;
+  color: var(--app-text-main) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-md) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Buttons (Memphis / Arcade Style) */
+/* Base Buttons */
 .btn {
-  font-family: var(--retro-font-mono) !important;
-  font-weight: 900 !important;
-  border-radius: 0px !important;
-  text-transform: uppercase;
-  border: 3px solid var(--retro-dark) !important;
-  box-shadow: 4px 4px 0px var(--retro-dark) !important;
-  transition: all 0.1s ease-in-out !important;
-  letter-spacing: 1px;
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn:active {
-  transform: translate(4px, 4px) !important;
-  box-shadow: 0px 0px 0px var(--retro-dark) !important;
+  transform: scale(0.97) !important;
 }
 
+/* Primary Button (Blue) */
 .btn-primary {
-  background-color: var(--retro-primary) !important;
-  color: var(--retro-text-light) !important;
+  background-color: var(--app-primary) !important;
+  color: var(--app-text-light) !important;
+  box-shadow: 0 4px 12px rgba(47, 128, 237, 0.3) !important;
 }
 
 .btn-primary:hover {
-  background-color: var(--retro-accent) !important;
-  border-color: var(--retro-dark) !important;
+  background-color: var(--app-primary-hover) !important;
+  box-shadow: 0 6px 16px rgba(47, 128, 237, 0.4) !important;
 }
 
+/* Success/Accent Button (Orange) */
+.btn-success {
+  background-color: var(--app-accent) !important;
+  color: var(--app-text-light) !important;
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3) !important;
+}
+
+.btn-success:hover {
+  background-color: var(--app-accent-hover) !important;
+}
+
+/* Outline Buttons */
 .btn-outline-primary {
-  background-color: var(--retro-bg) !important;
-  color: var(--retro-primary) !important;
-  border-color: var(--retro-primary) !important;
-  box-shadow: 4px 4px 0px var(--retro-primary) !important;
+  background-color: transparent !important;
+  color: var(--app-primary) !important;
+  border: 2px solid var(--app-primary) !important;
 }
 
 .btn-outline-primary:hover {
-  background-color: var(--retro-primary) !important;
-  color: var(--retro-text-light) !important;
-}
-
-.btn-success {
-  background-color: var(--retro-success) !important;
-  color: var(--retro-dark) !important;
+  background-color: rgba(47, 128, 237, 0.1) !important;
 }
 
 .btn-outline-secondary {
-  background-color: #fff !important;
-  color: var(--retro-dark) !important;
-  border-color: var(--retro-dark) !important;
+  background-color: transparent !important;
+  color: var(--app-text-main) !important;
+  border: 2px solid #DDDDDD !important;
 }
 
 .btn-outline-secondary:hover {
-  background-color: var(--retro-dark) !important;
-  color: #fff !important;
+  background-color: rgba(0,0,0,0.03) !important;
 }
 
 .btn-danger, .btn-outline-danger {
-  background-color: var(--retro-bg) !important;
-  color: var(--retro-danger) !important;
-  border-color: var(--retro-danger) !important;
-  box-shadow: 4px 4px 0px var(--retro-danger) !important;
+  background-color: transparent !important;
+  color: var(--app-danger) !important;
+  border: 2px solid var(--app-danger) !important;
 }
 
-.btn-outline-danger:hover {
-  background-color: var(--retro-danger) !important;
-  color: #fff !important;
+/* Forms & Inputs */
+.form-control {
+  background-color: #F8F9FA !important;
+  color: var(--app-text-main) !important;
+  border: 1px solid var(--app-border) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px;
+  font-family: var(--font-sans) !important;
+  transition: all 0.2s;
+  box-shadow: none !important;
+}
+
+.form-control:focus {
+  background-color: var(--app-surface) !important;
+  border-color: var(--app-primary) !important;
+  box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.2) !important;
+  outline: none;
 }
 
 /* Tables */
 .table {
-  color: var(--retro-text) !important;
-  border: 3px solid var(--retro-primary) !important;
-  background-color: var(--retro-bg) !important;
-  box-shadow: 6px 6px 0px var(--retro-primary);
+  color: var(--app-text-main) !important;
+  background-color: transparent !important;
+  border: none !important;
 }
 
 .table th, .table td {
-  border-bottom: 2px solid var(--retro-primary) !important;
+  border-bottom: 1px solid var(--app-border) !important;
+  padding: 16px 12px !important;
+  vertical-align: middle;
 }
 
 .table-light, .table thead th {
-  background-color: var(--retro-primary) !important;
-  color: var(--retro-text-light) !important;
-  font-family: var(--retro-font-display);
-  font-size: 1.4rem;
-  letter-spacing: 2px;
-  border-bottom: 3px solid var(--retro-dark) !important;
-  text-shadow: none;
-}
-
-.table-hover tbody tr:hover {
-  background-color: rgba(1, 138, 200, 0.1) !important;
-}
-
-/* Inputs */
-.form-control {
-  background-color: #fff !important;
-  color: var(--retro-dark) !important;
-  border: 3px solid var(--retro-primary) !important;
-  border-radius: 0px !important;
-  font-family: var(--retro-font-mono) !important;
-  font-weight: bold;
-  box-shadow: 4px 4px 0px rgba(1, 138, 200, 0.2) !important;
-  transition: all 0.2s;
-}
-
-.form-control:focus {
-  background-color: #fff !important;
-  border-color: var(--retro-accent) !important;
-  box-shadow: 4px 4px 0px var(--retro-accent) !important;
-  outline: none;
+  background-color: transparent !important;
+  color: var(--app-text-muted) !important;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--app-border) !important;
 }
 
 /* Badges */
 .badge {
-  font-family: var(--retro-font-display);
-  font-size: 1.2rem;
-  letter-spacing: 1px;
-  border: 2px solid var(--retro-dark);
-  box-shadow: 2px 2px 0px var(--retro-dark);
-  border-radius: 0;
-  text-transform: uppercase;
-  color: var(--retro-text-light) !important;
-  font-weight: normal;
-  text-shadow: none;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  border-radius: 20px;
+  padding: 6px 10px;
+  font-weight: 600;
 }
 
 .badge.bg-success {
-  background-color: var(--retro-success) !important;
-  color: var(--retro-dark) !important;
+  background-color: rgba(39, 174, 96, 0.15) !important;
+  color: var(--app-success) !important;
 }
-.badge.bg-info {
-  background-color: var(--retro-primary) !important;
+
+.badge.bg-secondary {
+  background-color: rgba(136, 136, 136, 0.15) !important;
+  color: var(--app-text-muted) !important;
 }

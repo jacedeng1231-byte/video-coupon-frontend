@@ -4,11 +4,11 @@
       <img
         v-if="user.pictureUrl"
         :src="user.pictureUrl"
-        class="mb-3 retro-avatar"
+        class="mb-3 user-avatar-large"
         alt="User Avatar"
       />
       <h3 class="fw-bold mb-1">歡迎, {{ user.displayName }}!</h3>
-      <p>很高興見到您來到 LINE 活動中心</p>
+      <p class="text-muted mb-0">很高興見到您來到 LINE 活動中心</p>
     </div>
 
     <PageTitle v-else title="LINE 活動中心" subtitle="LINE ACTIVITY CENTER" />
@@ -45,7 +45,7 @@
 
 <script>
 import api from "../api/api";
-import { initLiff } from "../liff/liffInit";
+import { getAuth } from "../liff/liffInit";
 import RetroTV from "../components/RetroTV.vue";
 import PageTitle from "../components/PageTitle.vue";
 
@@ -171,22 +171,10 @@ export default {
 
   async mounted() {
     try {
-      let profile;
-
-      if (import.meta.env.DEV) {
-        profile = {
-          displayName: "Local User",
-          pictureUrl:
-            "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
-        };
-      } else {
-        profile = await initLiff();
-      }
-
-      this.user = profile;
+      const auth = await getAuth();
       
-      if (this.user && this.user.userId) {
-        localStorage.setItem("userId", this.user.userId);
+      if (auth && auth.profile) {
+        this.user = auth.profile;
       }
 
       this.fetchLatestVideo();
@@ -198,11 +186,12 @@ export default {
 </script>
 
 <style scoped>
-.retro-avatar {
+.user-avatar-large {
   width: 80px;
   height: 80px;
   object-fit: cover;
-  border-radius: 4px;
-  box-shadow: 4px 4px 0px var(--retro-dark);
+  border-radius: 50%;
+  border: 4px solid var(--app-surface);
+  box-shadow: var(--shadow-md);
 }
 </style>

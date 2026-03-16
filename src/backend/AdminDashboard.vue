@@ -52,26 +52,26 @@ export default {
 
 <style scoped>
 .admin-nav-card {
-  transition: all 0.1s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
+  border-radius: 16px;
 }
 
 .admin-nav-card h5 {
-  color: var(--retro-dark);
+  color: var(--app-text-main);
 }
 
 .admin-nav-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px var(--retro-accent) !important;
-  border-color: var(--retro-accent) !important;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg) !important;
+  border-color: var(--app-primary) !important;
 }
 
 .admin-nav-card:hover h5 {
-  color: var(--retro-accent);
+  color: var(--app-primary);
 }
 
 .admin-nav-card:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px var(--retro-dark) !important;
+  transform: scale(0.98);
 }
 </style>

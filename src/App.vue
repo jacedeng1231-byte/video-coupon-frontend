@@ -1,6 +1,6 @@
 <script>
 import api from "./api/api";
-import { initLiff } from "./liff/liffInit";
+import { getAuth } from "./liff/liffInit";
 
 export default {
   data() {
@@ -10,31 +10,10 @@ export default {
   },
   async mounted() {
     try {
-      let profile;
-
-      // 開發模式
-      if (import.meta.env.DEV) {
-        profile = {
-          userId: "test-user",
-          displayName: "Local User",
-          pictureUrl: "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-        };
-      } else {
-        // Production 使用 LIFF
-        profile = await initLiff();
-        if (!profile) return;
+      const auth = await getAuth();
+      if (auth && auth.profile) {
+        this.user = auth.profile;
       }
-
-      // console.log("LINE profile:", profile);
-      this.user = profile;
-
-      const res = await api.post("/users/login", {
-        lineUserId: profile.userId,
-        name: profile.displayName,
-        pictureUrl: profile.pictureUrl
-      });
-
-      localStorage.setItem("userId", res.data._id);
     } catch (err) {
       console.error("LIFF Login Error:", err);
     }
@@ -59,112 +38,156 @@ export default {
 </script>
 
 <template>
-  <div>
-    <nav class="navbar navbar-expand-lg navbar-dark retro-navbar">
-      <div class="container">
-        <router-link class="navbar-brand retro-brand" to="/" @click="closeNavbar"> 
-          <span class="brand-icon">📺</span> RETRO CENTER 
+  <div class="app-layout">
+    <!-- Top App Bar -->
+    <header class="top-bar">
+      <div class="container d-flex justify-content-between align-items-center h-100">
+        <router-link class="brand-title" to="/">
+          LINE 活動中心
         </router-link>
 
-        <button 
-          class="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarNav" 
-          aria-controls="navbarNav" 
-          aria-expanded="false" 
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <div class="navbar-nav me-auto">
-            <router-link class="nav-link" to="/dashboard" @click="closeNavbar"> 後台 </router-link>
-            <router-link class="nav-link" to="/videos" @click="closeNavbar"> 看片領券 </router-link>
-            <router-link class="nav-link" to="/coupons" @click="closeNavbar"> 我的優惠券 </router-link>
-          </div>
-
-          <!-- 使用者資訊 -->
-          <div v-if="user" class="d-flex align-items-center mt-3 mt-lg-0">
-            <img 
-              v-if="user.pictureUrl"
-              :src="user.pictureUrl" 
-              class="rounded-circle me-2 border border-white" 
-              style="width: 32px; height: 32px; object-fit: cover;"
-              alt="User Avatar"
-            />
-            <span class="text-white fw-medium">
-              {{ user.displayName }}
-            </span>
-          </div>
+        <!-- 使用者資訊 -->
+        <div v-if="user" class="user-profile">
+          <span class="user-name d-none d-sm-inline">{{ user.displayName }}</span>
+          <img 
+            v-if="user.pictureUrl"
+            :src="user.pictureUrl" 
+            class="user-avatar" 
+            alt="User Avatar"
+          />
         </div>
       </div>
-    </nav>
+    </header>
 
-    <router-view />
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <router-view />
+    </main>
+
+    <!-- Mobile Bottom Navigation (Tab Bar) -->
+    <nav class="bottom-tab-bar">
+      <div class="container d-flex justify-content-around align-items-center h-100">
+        <router-link class="tab-item" to="/" exact-active-class="tab-active">
+          <span class="tab-icon">🏠</span>
+          <span class="tab-label">首頁</span>
+        </router-link>
+
+        <router-link class="tab-item" to="/videos" active-class="tab-active">
+          <span class="tab-icon">🎬</span>
+          <span class="tab-label">看片</span>
+        </router-link>
+
+        <router-link class="tab-item" to="/coupons" active-class="tab-active">
+          <span class="tab-icon">🎟️</span>
+          <span class="tab-label">優惠券</span>
+        </router-link>
+
+        <router-link class="tab-item" to="/dashboard/videos" active-class="tab-active">
+          <span class="tab-icon">⚙️</span>
+          <span class="tab-label">管理</span>
+        </router-link>
+      </div>
+    </nav>
   </div>
 </template>
 
 <style scoped>
-.retro-navbar {
-  background-color: var(--retro-primary);
-  border-bottom: 4px solid var(--retro-dark);
-  box-shadow: 0 4px 0px var(--retro-dark);
-  padding: 10px 0;
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 60px; /* Space for Top Bar */
+  padding-bottom: 70px; /* Space for Bottom Tab Bar */
+}
+
+/* --- Top Bar --- */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: var(--app-surface);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   z-index: 1000;
 }
 
-.retro-brand {
-  font-family: var(--retro-font-display, 'VT323', monospace);
-  font-size: 2.2rem;
-  color: var(--retro-bg) !important;
-  text-shadow: 3px 3px 0px var(--retro-dark);
-  letter-spacing: 2px;
-  line-height: 1;
+.brand-title {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--app-text-main);
+  text-decoration: none;
 }
 
-.brand-icon {
-  filter: drop-shadow(2px 2px 0px var(--retro-dark));
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.nav-link {
-  font-family: var(--retro-font-mono, 'Courier New', Courier, monospace);
-  font-weight: 900;
-  color: var(--retro-bg) !important;
-  text-transform: uppercase;
-  margin: 0 5px;
-  padding: 8px 15px !important;
-  border: 2px solid transparent;
-  transition: all 0.1s;
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--app-text-muted);
 }
 
-.nav-link:hover, .nav-link.router-link-active {
-  color: var(--retro-dark) !important;
-  background-color: var(--retro-accent);
-  border: 2px solid var(--retro-dark);
-  box-shadow: 4px 4px 0px var(--retro-dark);
-  transform: translate(-2px, -2px);
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--app-border);
 }
 
-/* 漢堡選單按鈕 (Mobile Navbar Toggler) */
-.navbar-toggler {
-  background-color: var(--retro-accent);
-  border: 3px solid var(--retro-dark) !important;
-  border-radius: 0;
-  padding: 8px 10px;
-  box-shadow: 4px 4px 0px var(--retro-dark);
-  transition: all 0.1s;
+/* --- Main Content --- */
+.main-content {
+  flex: 1;
 }
 
-.navbar-toggler:active, .navbar-toggler[aria-expanded="true"] {
-  background-color: var(--retro-accent);
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px var(--retro-dark);
+/* --- Bottom Tab Bar --- */
+.bottom-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: var(--app-surface);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom); /* For iPhone notch handling */
 }
 
-.navbar-toggler:focus {
-  outline: none;
-  box-shadow: 4px 4px 0px var(--retro-dark);
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: var(--app-text-muted);
+  transition: color 0.2s;
+}
+
+.tab-icon {
+  font-size: 1.5rem;
+  margin-bottom: 2px;
+  filter: grayscale(100%) opacity(0.6);
+  transition: all 0.2s;
+}
+
+.tab-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tab-active {
+  color: var(--app-primary);
+}
+
+.tab-active .tab-icon {
+  filter: grayscale(0%) opacity(1);
+  transform: translateY(-2px);
 }
 </style>

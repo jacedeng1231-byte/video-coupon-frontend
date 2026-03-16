@@ -20,15 +20,19 @@
                 {{ c.couponId.title }}
               </h5>
 
-              <p class="card-text mb-3">
-                <span class="fs-6 opacity-75">折扣碼</span><br/>
-                <code class="fs-4 d-block mt-1 coupon-code">{{ c.couponId.code }}</code>
+              <p class="card-text mb-1">
+                <span class="fs-6 text-muted">折扣碼</span><br/>
+                <code class="fs-4 d-block mt-2 coupon-code">{{ c.couponId.code }}</code>
               </p>
 
-              <p class="small mb-auto opacity-75">
+              <p class="small mb-3 text-muted">
                 到期日：
                 {{ new Date(c.couponId.expireDate).toLocaleDateString() }}
               </p>
+
+              <div class="ticket-divider"></div>
+
+              <div class="mt-auto">
 
               <!-- 已使用狀態 -->
               <button
@@ -63,11 +67,12 @@
               <!-- 可使用狀態 -->
               <button
                 v-else
-                class="btn btn-success w-100 mt-4"
+                class="btn btn-success w-100"
                 @click="useCoupon(c.couponId._id)"
               >
                 使用優惠券
               </button>
+              </div>
             </div>
           </div>
         </div>
@@ -127,37 +132,65 @@ export default {
 
 <style scoped>
 .coupon-card {
-  position: relative;
+  border-radius: 16px;
   overflow: hidden;
-  background-color: #fff !important;
-  border: 4px dashed var(--retro-primary) !important;
+  background-color: var(--app-surface) !important;
+  box-shadow: var(--shadow-md);
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.coupon-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -50%;
-  width: 200%; height: 100%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(1, 138, 200, 0.05),
-    rgba(1, 138, 200, 0.05) 10px,
-    transparent 10px,
-    transparent 20px
-  );
-  pointer-events: none;
+.coupon-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-title {
+  color: var(--app-text-main);
+  font-size: 1.1rem;
 }
 
 .coupon-code {
-  color: var(--retro-text-light);
-  background: var(--retro-accent);
-  padding: 8px 12px;
-  border: 3px solid var(--retro-dark);
-  box-shadow: 4px 4px 0px var(--retro-dark);
-  font-family: var(--retro-font-mono);
-  font-weight: 900;
-  letter-spacing: 2px;
+  color: var(--app-primary);
+  background: #F8F9FA;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 1px;
   width: 100%;
   text-align: center;
+  border: 1px dashed var(--app-border);
+}
+
+/* Add a subtle visual divider to mimic a ticket */
+.coupon-card .card-body {
+  position: relative;
+}
+
+.ticket-divider {
+  border-top: 2px dashed var(--app-border);
+  margin: 16px -16px;
+  position: relative;
+}
+
+.ticket-divider::before, .ticket-divider::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--app-bg);
+  border-radius: 50%;
+}
+
+.ticket-divider::before {
+  left: -26px;
+  box-shadow: inset -1px 0 0 rgba(0,0,0,0.02);
+}
+
+.ticket-divider::after {
+  right: -26px;
+  box-shadow: inset 1px 0 0 rgba(0,0,0,0.02);
 }
 </style>
