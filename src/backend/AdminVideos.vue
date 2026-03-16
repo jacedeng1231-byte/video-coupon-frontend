@@ -14,6 +14,7 @@ export default {
         rewardCoupon: "",
       },
       editingVideo: null,
+      loading: true,
     };
   },
   methods: {
@@ -81,9 +82,10 @@ export default {
       this.editingVideo = null;
     },
   },
-  mounted() {
-    this.fetchVideos();
-    this.fetchCoupons();
+  async mounted() {
+    this.loading = true;
+    await Promise.all([this.fetchVideos(), this.fetchCoupons()]);
+    this.loading = false;
   },
 };
 </script>
@@ -92,8 +94,15 @@ export default {
   <div class="container mt-4">
     <PageTitle title="影片管理" subtitle="VIDEO MANAGEMENT" />
 
-    <!-- 新增 / 修改 表單 -->
-    <div class="card p-3 mb-4">
+    <div v-if="loading" class="text-center mt-5">
+      <div class="spinner-border text-primary"></div>
+      <p class="mt-2 text-muted fw-bold">正在載入影片資料...</p>
+    </div>
+
+    <!-- 內容 -->
+    <div v-else>
+      <!-- 新增 / 修改 表單 -->
+      <div class="card p-3 mb-4">
       <h5>{{ editingVideo ? "修改影片" : "新增影片" }}</h5>
       <div v-if="!editingVideo">
         <input
@@ -183,6 +192,7 @@ export default {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   </div>
 </template>

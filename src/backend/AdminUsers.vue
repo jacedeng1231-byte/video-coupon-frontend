@@ -2,7 +2,12 @@
   <div class="container mt-4">
     <PageTitle title="會員管理" subtitle="USER MANAGEMENT (TEST)" />
 
-    <div class="card p-3 mb-4">
+    <div v-if="loading" class="text-center mt-5">
+      <div class="spinner-border text-primary"></div>
+      <p class="mt-2 text-muted fw-bold">正在載入會員資料...</p>
+    </div>
+
+    <div v-else class="card p-3 mb-4">
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
@@ -63,6 +68,7 @@ export default {
   data() {
     return {
       users: [],
+      loading: true,
     };
   },
   methods: {
@@ -102,8 +108,10 @@ export default {
       }
     },
   },
-  mounted() {
-    this.fetchUsers();
+  async mounted() {
+    this.loading = true;
+    await this.fetchUsers();
+    this.loading = false;
   },
 };
 </script>

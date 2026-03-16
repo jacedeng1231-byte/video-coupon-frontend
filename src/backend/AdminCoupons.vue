@@ -14,6 +14,7 @@ export default {
         maxUse: 0,
       },
       editingCoupon: null,
+      loading: true,
     };
   },
   methods: {
@@ -76,8 +77,10 @@ export default {
       this.editingCoupon = null;
     },
   },
-  mounted() {
-    this.fetchCoupons();
+  async mounted() {
+    this.loading = true;
+    await this.fetchCoupons();
+    this.loading = false;
   },
 };
 </script>
@@ -86,8 +89,15 @@ export default {
   <div class="container mt-4">
     <PageTitle title="優惠券管理" subtitle="COUPON MANAGEMENT" />
 
-    <!-- 新增 / 修改 表單 -->
-    <div class="card p-3 mb-4">
+    <div v-if="loading" class="text-center mt-5">
+      <div class="spinner-border text-primary"></div>
+      <p class="mt-2 text-muted fw-bold">正在載入優惠券資料...</p>
+    </div>
+
+    <!-- 內容 -->
+    <div v-else>
+      <!-- 新增 / 修改 表單 -->
+      <div class="card p-3 mb-4">
       <h5>{{ editingCoupon ? "修改優惠券" : "新增優惠券" }}</h5>
       <div v-if="!editingCoupon">
         <input
@@ -200,6 +210,7 @@ export default {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   </div>
 </template>

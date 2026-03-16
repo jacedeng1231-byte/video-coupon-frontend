@@ -6,6 +6,7 @@ export default {
   data() {
     return {
       user: null,
+      isAuthReady: false,
     };
   },
   async mounted() {
@@ -16,6 +17,8 @@ export default {
       }
     } catch (err) {
       console.error("LIFF Login Error:", err);
+    } finally {
+      this.isAuthReady = true;
     }
   },
   methods: {
@@ -38,7 +41,15 @@ export default {
 </script>
 
 <template>
-  <div class="app-layout">
+  <!-- Global Loading State -->
+  <div v-if="!isAuthReady" class="global-loading">
+    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">載入中...</span>
+    </div>
+    <p class="mt-3 text-muted fw-bold">連線至 LINE 活動中心...</p>
+  </div>
+
+  <div v-else class="app-layout">
     <!-- Top App Bar -->
     <header class="top-bar">
       <div class="container d-flex justify-content-between align-items-center h-100">
@@ -46,8 +57,8 @@ export default {
           LINE 活動中心
         </router-link>
 
-        <!-- 使用者資訊 -->
-        <div v-if="user" class="user-profile">
+        <!-- 使用者資訊與後台入口 -->
+        <router-link v-if="user" to="/dashboard" class="user-profile text-decoration-none" title="前往後台管理">
           <span class="user-name d-none d-sm-inline">{{ user.displayName }}</span>
           <img 
             v-if="user.pictureUrl"
@@ -55,7 +66,7 @@ export default {
             class="user-avatar" 
             alt="User Avatar"
           />
-        </div>
+        </router-link>
       </div>
     </header>
 
@@ -81,17 +92,28 @@ export default {
           <span class="tab-icon">🎟️</span>
           <span class="tab-label">優惠券</span>
         </router-link>
-
-        <router-link class="tab-item" to="/dashboard/videos" active-class="tab-active">
-          <span class="tab-icon">⚙️</span>
-          <span class="tab-label">管理</span>
-        </router-link>
       </div>
     </nav>
   </div>
 </template>
 
 <style scoped>
+/* --- Global Loading --- */
+.global-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--app-bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+/* --- Layout --- */
 .app-layout {
   display: flex;
   flex-direction: column;
