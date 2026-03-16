@@ -154,7 +154,7 @@ export default {
             <th>標題</th>
             <th>代碼</th>
             <th>到期日</th>
-            <th>總發放次數</th>
+            <th>發放次數</th>
             <th>使用進度</th>
             <th>操作</th>
           </tr>
@@ -166,7 +166,7 @@ export default {
               <code>{{ c.code }}</code>
             </td>
             <td>{{ new Date(c.expireDate).toLocaleDateString() }}</td>
-            <td>{{ c.maxUse }}</td>
+            <td>{{ c.issuedCount || 0 }}</td>
             <td>
               <span
                 :class="
