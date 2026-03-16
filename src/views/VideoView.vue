@@ -108,6 +108,12 @@ export default {
           ) {
             this.players[video._id] = new YT.Player(`player-${video._id}`, {
               videoId: video.youtubeId,
+              width: "100%",
+              height: "100%",
+              playerVars: {
+                rel: 0,
+                playsinline: 1
+              },
               events: {
                 onStateChange: (event) => {
                   const player = event.target;

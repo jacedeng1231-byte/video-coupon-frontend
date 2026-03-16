@@ -173,18 +173,20 @@ export default {
             </td>
             <td>{{ v.rewardCoupon?.title || "無" }}</td>
             <td>
-              <button
-                class="btn btn-sm btn-outline-primary me-2"
-                @click="editVideo(v)"
-              >
-                修改
-              </button>
-              <button
-                class="btn btn-sm btn-outline-danger"
-                @click="deleteVideo(v._id)"
-              >
-                刪除
-              </button>
+              <div class="d-flex flex-column flex-sm-row gap-2">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  @click="editVideo(v)"
+                >
+                  修改
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  @click="deleteVideo(v._id)"
+                >
+                  刪除
+                </button>
+              </div>
             </td>
           </tr>
           <tr v-if="videos.length === 0">

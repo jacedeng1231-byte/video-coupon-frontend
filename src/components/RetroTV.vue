@@ -10,7 +10,6 @@
       <h3 class="video-title">{{ video.title }}</h3>
       
       <div class="status-badges mb-3">
-        <span class="badge bg-secondary me-2">觀看次數: {{ video.viewCount || 0 }}</span>
         <span v-if="video.isClaimed" class="badge bg-success">✅ 獎勵已領取</span>
         <span v-else-if="watched" class="badge bg-primary">✨ 可領取獎勵</span>
       </div>
@@ -58,7 +57,7 @@ export default {
 <style scoped>
 .video-card {
   width: 100%;
-  max-width: 600px;
+  max-width: 100%; /* Ensure it does not bleed off mobile screens */
   background-color: var(--app-surface);
   border-radius: 16px;
   overflow: hidden;
@@ -75,13 +74,15 @@ export default {
   position: relative;
 }
 
+.video-wrapper iframe,
 .video-wrapper .player {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   border: none;
+  max-width: 100%;
 }
 
 .video-info {

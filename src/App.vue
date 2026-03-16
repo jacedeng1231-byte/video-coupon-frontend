@@ -79,13 +79,13 @@ export default {
     <nav class="bottom-tab-bar">
       <div class="container d-flex justify-content-around align-items-center h-100">
         <router-link class="tab-item" to="/" exact-active-class="tab-active">
-          <span class="tab-icon">🏠</span>
-          <span class="tab-label">首頁</span>
-        </router-link>
-
-        <router-link class="tab-item" to="/videos" active-class="tab-active">
           <span class="tab-icon">🎬</span>
           <span class="tab-label">看片</span>
+        </router-link>
+
+        <router-link class="tab-item" to="/member" active-class="tab-active">
+          <span class="tab-icon">👤</span>
+          <span class="tab-label">會員中心</span>
         </router-link>
 
         <router-link class="tab-item" to="/coupons" active-class="tab-active">

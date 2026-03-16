@@ -9,10 +9,9 @@ import AdminUsers from "../backend/AdminUsers.vue"
 import Dashboard from '../backend/AdminDashboard.vue'
 
 const routes = [
+  { path: "/", component: Videos },
 
-  { path: "/", component: Home },
-
-  { path: "/videos", component: Videos },
+  { path: "/member", component: Home },
 
   { path: "/coupons", component: MyCoupons },
 

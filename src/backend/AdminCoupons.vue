@@ -191,18 +191,20 @@ export default {
               </span>
             </td>
             <td>
-              <button
-                class="btn btn-sm btn-outline-primary me-2"
-                @click="editCoupon(c)"
-              >
-                修改
-              </button>
-              <button
-                class="btn btn-sm btn-outline-danger"
-                @click="deleteCoupon(c._id)"
-              >
-                刪除
-              </button>
+              <div class="d-flex flex-column flex-sm-row gap-2">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  @click="editCoupon(c)"
+                >
+                  修改
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  @click="deleteCoupon(c._id)"
+                >
+                  刪除
+                </button>
+              </div>
             </td>
           </tr>
           <tr v-if="coupons.length === 0">

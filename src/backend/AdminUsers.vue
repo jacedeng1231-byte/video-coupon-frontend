@@ -32,18 +32,20 @@
               </td>
               <td>{{ new Date(u.createdAt).toLocaleString() }}</td>
               <td>
-                <button
-                  class="btn btn-sm btn-warning me-2"
-                  @click="resetUser(u._id)"
-                >
-                  <i class="bi bi-arrow-counterclockwise"></i> 重置紀錄
-                </button>
-                <button
-                  class="btn btn-sm btn-outline-danger"
-                  @click="deleteUser(u._id)"
-                >
-                  <i class="bi bi-trash"></i> 徹底刪除
-                </button>
+                <div class="d-flex flex-column flex-xl-row gap-2">
+                  <button
+                    class="btn btn-sm btn-warning text-nowrap"
+                    @click="resetUser(u._id)"
+                  >
+                    <i class="bi bi-arrow-counterclockwise"></i> 重置紀錄
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger text-nowrap"
+                    @click="deleteUser(u._id)"
+                  >
+                    <i class="bi bi-trash"></i> 徹底刪除
+                  </button>
+                </div>
               </td>
             </tr>
             <tr v-if="users.length === 0">
