@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <PageTitle title="影片中心" subtitle="VIDEO CENTER" />
+    <h2 class="mb-4">影片</h2>
 
     <div v-if="loading" class="text-center mt-5">
       <div class="spinner-border text-success"></div>
@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div v-else class="text-center mt-5 opacity-75">
+      <div v-else class="text-center mt-5 text-muted">
         <h5>目前沒有活動影片</h5>
         <p>可以稍後再回來看看有沒有新的活動喔！</p>
       </div>
@@ -30,7 +30,6 @@
 <script>
 import api from "../api/api";
 import RetroTV from "../components/RetroTV.vue";
-import PageTitle from "../components/PageTitle.vue";
 
 export default {
   data() {
@@ -39,10 +38,9 @@ export default {
       watched: {},
       loading: true,
       players: {},
-      requiredWatchSeconds: 5, // 新增：設定觀看幾秒後即可領取
     };
   },
-  components: { RetroTV, PageTitle },
+  components: { RetroTV },
   methods: {
     async loadVideos() {
       // 0. 清理舊的播放器實例，避免重整後容器抓不到
@@ -55,6 +53,47 @@ export default {
 
       this.loading = true;
       try {
+        // --- 測試用假資料區塊開始 ---
+        // 模擬延遲
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        this.videos = [
+          {
+            _id: "mock-video-1",
+            title: "Vue 3 教學 - 基礎入門",
+            youtubeId: "1vY1P1mK8w4",
+            rewardCoupon: "mock-coupon-1",
+            isWatched: false,
+            isClaimed: false
+          },
+          {
+            _id: "mock-video-2",
+            title: "CSS 動畫與轉場實戰",
+            youtubeId: "yHMDM2iihyA",
+            rewardCoupon: "mock-coupon-2",
+            isWatched: true,
+            isClaimed: false
+          },
+          {
+            _id: "mock-video-3",
+            title: "前端效能優化指南",
+            youtubeId: "AQqOZqG0HKE",
+            rewardCoupon: "mock-coupon-3",
+            isWatched: true,
+            isClaimed: true
+          }
+        ];
+
+        // Initialize watched status from mock data
+        this.videos.forEach((video) => {
+          if (video.isWatched) {
+            this.watched[video._id] = true;
+          }
+        });
+        // --- 測試用假資料區塊結束 ---
+
+        // (原本的 Backend API 呼叫先被註解掉)
+        /*
         const userId = localStorage.getItem("userId");
         const res = await api.get("/videos", {
           params: { userId },
@@ -67,6 +106,7 @@ export default {
             this.watched[video._id] = true;
           }
         });
+        */
       } catch (err) {
         console.error("Failed to load videos:", err);
       } finally {
@@ -110,24 +150,8 @@ export default {
               videoId: video.youtubeId,
               events: {
                 onStateChange: (event) => {
-                  const player = event.target;
-                  if (event.data === YT.PlayerState.PLAYING) {
-                    // Start checking time every second
-                    player.timeChecker = setInterval(() => {
-                      if (player.getCurrentTime() >= this.requiredWatchSeconds && !this.watched[video._id]) {
-                        this.markWatched(video._id);
-                        clearInterval(player.timeChecker);
-                      }
-                    }, 1000);
-                  } else {
-                    // Clear interval if paused, ended, or buffering
-                    if (player.timeChecker) {
-                      clearInterval(player.timeChecker);
-                    }
-                    // Fallback: If it somehow reached the end without triggering the interval
-                    if (event.data === YT.PlayerState.ENDED && !this.watched[video._id]) {
-                      this.markWatched(video._id);
-                    }
+                  if (event.data === YT.PlayerState.ENDED) {
+                    this.markWatched(video._id);
                   }
                 },
               },

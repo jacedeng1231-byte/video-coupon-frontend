@@ -1,7 +1,9 @@
 <script>
 import api from "../api/api";
+import PageTitle from "../components/PageTitle.vue";
 
 export default {
+  components: { PageTitle },
   data() {
     return {
       videos: [],
@@ -88,10 +90,10 @@ export default {
 
 <template>
   <div class="container mt-4">
-    <h2 class="mb-4">影片管理</h2>
+    <PageTitle title="影片管理" subtitle="VIDEO MANAGEMENT" />
 
     <!-- 新增 / 修改 表單 -->
-    <div class="card p-3 mb-4 shadow-sm">
+    <div class="card p-3 mb-4">
       <h5>{{ editingVideo ? "修改影片" : "新增影片" }}</h5>
       <div v-if="!editingVideo">
         <input
@@ -177,7 +179,7 @@ export default {
             </td>
           </tr>
           <tr v-if="videos.length === 0">
-            <td colspan="4" class="text-center text-muted">目前無影片</td>
+            <td colspan="5" class="text-center opacity-75">目前無影片</td>
           </tr>
         </tbody>
       </table>

@@ -41,13 +41,33 @@
         <div class="tv-panel">
           
           <div class="knobs-container">
-            <div class="knob">
-              <div class="knob-dial"></div>
-              <div class="knob-marker"></div>
+            <!-- Simulated Watch (Top Knob) -->
+            <div class="knob-wrapper">
+              <button class="knob" @click="$emit('simulateWatch')" title="模擬觀看完畢">
+                <div class="knob-dial"></div>
+                <div class="knob-marker watch-marker"></div>
+              </button>
+              <span class="knob-label">模擬播放完畢</span>
             </div>
-            <div class="knob">
-              <div class="knob-dial"></div>
-              <div class="knob-marker"></div>
+
+            <!-- Claim Reward (Bottom Knob) -->
+            <div class="knob-wrapper">
+              <button 
+                class="knob claim-knob" 
+                :class="{ 'disabled-knob': (!watched && !video.isClaimed) || video.isClaimed }"
+                @click="watched && !video.isClaimed ? $emit('claim') : null" 
+                :title="video.isClaimed ? '已領取過' : '領取獎勵'"
+              >
+                <div class="knob-dial"></div>
+                <div 
+                  class="knob-marker claim-marker" 
+                  :class="{ 
+                    'active': watched && !video.isClaimed,
+                    'claimed': video.isClaimed
+                  }"
+                ></div>
+              </button>
+              <span class="knob-label">{{ video.isClaimed ? '已領取過' : '領取獎勵' }}</span>
             </div>
           </div>
 
@@ -55,25 +75,6 @@
             <div class="grille-row" v-for="r in 8" :key="'r-'+r">
               <div class="grille-hole" v-for="c in 4" :key="'c-'+c"></div>
             </div>
-          </div>
-
-          <div class="action-buttons">
-            <button
-              v-if="watched && !video.isClaimed"
-              class="vintage-btn claim-btn"
-              @click="$emit('claim')"
-              title="Claim Reward"
-            >
-              <span class="btn-icon">🎁</span>
-            </button>
-
-            <button
-              class="vintage-btn watch-btn"
-              @click="$emit('simulateWatch')"
-              title="Simulate Watch (Dev)"
-            >
-              <span class="btn-icon">▶</span>
-            </button>
           </div>
           
           <div class="brand">RETROVISION</div>
@@ -138,9 +139,9 @@ export default {
   bottom: 10px;
   width: 6px;
   height: 80px;
-  background: linear-gradient(to right, #ccc, #fff, #999);
+  background: #fff;
   border-radius: 3px;
-  border: 1px solid #777;
+  border: 2px solid var(--retro-dark);
 }
 
 .antenna-rod.left {
@@ -158,38 +159,35 @@ export default {
 /* --- TV Body --- */
 .tv-body {
   width: 100%;
-  /* Wood texture approximation using gradients */
-  background: linear-gradient(135deg, #7c4c26 0%, #5c3412 50%, #4a280e 100%);
-  border-radius: 30px;
+  /* Vibrant plastic shell */
+  background-color: var(--retro-primary);
+  border-radius: 20px;
   padding: 20px;
   box-shadow: 
-    inset 0 10px 20px rgba(255,255,255,0.15),
-    inset 0 -10px 25px rgba(0,0,0,0.7),
-    0 15px 25px rgba(0,0,0,0.6);
-  border: 4px solid #331908;
+    inset 4px 4px 0px rgba(255,255,255,0.3),
+    12px 12px 0px var(--retro-dark);
+  border: 6px solid var(--retro-dark);
 }
 
 .tv-inner-body {
-  background: #1a1a1a;
-  border-radius: 20px;
+  background: var(--retro-bg);
+  border-radius: 12px;
   display: flex;
   padding: 20px;
   gap: 20px;
-  box-shadow: inset 0 0 30px rgba(0,0,0,1);
-  border: 2px solid #000;
-  border-top-color: #333;
+  box-shadow: inset 4px 4px 0px rgba(0,0,0,0.1);
+  border: 4px solid var(--retro-dark);
 }
 
 /* --- CRT Screen --- */
 .crt-wrapper {
   flex: 1;
-  background: #0d0d0d;
-  border-radius: 12%;
+  background: #000;
+  border-radius: 12px;
   padding: 12px;
   box-shadow: 
-    0 0 0 10px #222, 
-    0 0 0 14px #151515,
-    inset 0 10px 15px rgba(0,0,0,0.8);
+    0 0 0 8px var(--retro-dark), 
+    inset 0 4px 8px rgba(0,0,0,0.8);
 }
 
 .crt-bezel {
@@ -199,8 +197,7 @@ export default {
   border-radius: 10%;
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 0 40px #000;
-  border: 2px solid #2a2a2a;
+  border: 4px solid var(--retro-dark);
 }
 
 .crt-screen {
@@ -299,10 +296,10 @@ export default {
 /* OSD Text */
 .osd-text {
   position: absolute;
-  color: #3fec3f; /* Vintage green phosphor */
+  color: #fff;
   font-family: 'VT323', 'Courier New', monospace;
   font-size: 1.5rem;
-  text-shadow: 0 0 5px #3fec3f, 0 0 15px #3fec3f;
+  text-shadow: 2px 2px 0px var(--retro-accent);
   z-index: 20;
   pointer-events: none;
   text-transform: uppercase;
@@ -321,19 +318,15 @@ export default {
 /* --- TV Panel --- */
 .tv-panel {
   width: 100px;
-  background: linear-gradient(to right, #d4cecb, #bcaca4);
-  border-radius: 12px;
+  background-color: var(--retro-bg);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: 15px 5px;
-  box-shadow: 
-    inset 0 0 10px rgba(0,0,0,0.5), 
-    0 5px 15px rgba(0,0,0,0.8);
-  border: 3px solid #665b53;
-  border-left-color: #8c8279;
-  border-top-color: #8c8279;
+  border: 4px solid var(--retro-dark);
+  box-shadow: inset 4px 4px 0px rgba(255,255,255,0.5);
 }
 
 .knobs-container {
@@ -343,22 +336,39 @@ export default {
   margin-top: 5px;
 }
 
+.knob-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
 .knob {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #1a1a1a, #333);
-  box-shadow: 
-    0 5px 10px rgba(0,0,0,0.6),
-    inset 0 2px 5px rgba(255,255,255,0.2);
-  border: 2px solid #111;
+  background-color: var(--retro-accent);
+  box-shadow: 4px 4px 0px var(--retro-dark);
+  border: 3px solid var(--retro-dark);
   position: relative;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.1s;
+  padding: 0;
+  display: block;
 }
 
-.knob:hover {
-  transform: scale(1.05);
+.knob:hover:not(.disabled-knob) {
+  transform: rotate(15deg) scale(1.05);
+}
+
+.knob:active:not(.disabled-knob) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--retro-dark);
+}
+
+.disabled-knob {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .knob-marker {
@@ -371,6 +381,35 @@ export default {
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 0 3px rgba(255,255,255,0.8);
+  transition: all 0.3s ease;
+}
+
+.watch-marker {
+  background-color: #e0e0e0;
+}
+
+.claim-marker {
+  background-color: #555;
+  box-shadow: none;
+}
+
+.claim-marker.active {
+  background-color: #4CAF50;
+  box-shadow: 0 0 8px #4CAF50, 0 0 12px #4CAF50;
+}
+
+.claim-marker.claimed {
+  background-color: #f44336;
+  box-shadow: 0 0 8px #f44336, 0 0 12px #f44336;
+}
+
+.knob-label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.6rem;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 0.5px;
+  text-shadow: 0.5px 0.5px 0px rgba(255,255,255,0.4);
 }
 
 /* Speaker Grille */
@@ -380,9 +419,9 @@ export default {
   gap: 6px;
   margin: 15px 0;
   padding: 10px;
-  background: rgba(0,0,0,0.1);
-  border-radius: 8px;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+  background: var(--retro-primary);
+  border-radius: 4px;
+  border: 3px solid var(--retro-dark);
 }
 
 .grille-row {
@@ -399,60 +438,13 @@ export default {
   box-shadow: inset 0 2px 3px #000, 0 1px 1px rgba(255,255,255,0.4);
 }
 
-/* Buttons */
-.action-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 10px;
-}
-
-.vintage-btn {
-  width: 50px;
-  height: 35px;
-  border-radius: 5px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 
-    0 4px 8px rgba(0,0,0,0.5),
-    inset 0 2px 2px rgba(255,255,255,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.1s;
-  position: relative;
-}
-
-.vintage-btn:active {
-  transform: translateY(4px);
-  box-shadow: 
-    0 0px 4px rgba(0,0,0,0.5),
-    inset 0 4px 6px rgba(0,0,0,0.4);
-}
-
-.btn-icon {
-  font-size: 1.2rem;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
-}
-
-.claim-btn {
-  background: linear-gradient(to bottom, #f2c94c, #f2994a);
-  border: 1px solid #d48030;
-}
-
-.watch-btn {
-  background: linear-gradient(to bottom, #e0e0e0, #bdbdbd);
-  border: 1px solid #9e9e9e;
-}
-
 .brand {
   font-family: 'Courier New', Courier, monospace;
   font-weight: 900;
   font-size: 0.65rem;
   letter-spacing: 1px;
-  color: #222;
-  text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+  color: var(--retro-primary);
+  margin-top: 5px;
   margin-bottom: 5px;
 }
 
@@ -477,12 +469,12 @@ export default {
   .knobs-container {
     flex-direction: row;
     margin-top: 0;
-    gap: 15px;
+    gap: 20px;
   }
   
   .knob {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
   }
   
   .speaker-grille {
@@ -501,19 +493,7 @@ export default {
     width: 4px;
     height: 4px;
   }
-  
-  .action-buttons {
-    flex-direction: row;
-    margin: 0;
-    gap: 10px;
-    align-items: center;
-  }
 
-  .vintage-btn {
-    width: 45px;
-    height: 35px;
-  }
-  
   .brand {
     display: none; /* Hide brand on mobile horizontal panel */
   }

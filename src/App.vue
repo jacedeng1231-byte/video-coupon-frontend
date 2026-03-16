@@ -39,14 +39,32 @@ export default {
       console.error("LIFF Login Error:", err);
     }
   },
+  methods: {
+    closeNavbar() {
+      const navbarCollapse = document.getElementById("navbarNav");
+      if (navbarCollapse && navbarCollapse.classList.contains("show")) {
+        // Use Bootstrap's Collapse API to hide it properly
+        if (window.bootstrap) {
+          const bsCollapse = window.bootstrap.Collapse.getInstance(navbarCollapse) 
+            || new window.bootstrap.Collapse(navbarCollapse, { toggle: false });
+          bsCollapse.hide();
+        } else {
+          // Fallback if bootstrap JS is not globally available
+          navbarCollapse.classList.remove("show");
+        }
+      }
+    }
+  }
 };
 </script>
 
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark retro-navbar">
       <div class="container">
-        <router-link class="navbar-brand fw-bold" to="/"> 活動中心 </router-link>
+        <router-link class="navbar-brand retro-brand" to="/" @click="closeNavbar"> 
+          <span class="brand-icon">📺</span> RETRO CENTER 
+        </router-link>
 
         <button 
           class="navbar-toggler" 
@@ -62,9 +80,9 @@ export default {
 
         <div class="collapse navbar-collapse" id="navbarNav">
           <div class="navbar-nav me-auto">
-            <router-link class="nav-link" to="/dashboard"> 後台 </router-link>
-            <router-link class="nav-link" to="/videos"> 看片領券 </router-link>
-            <router-link class="nav-link" to="/coupons"> 我的優惠券 </router-link>
+            <router-link class="nav-link" to="/dashboard" @click="closeNavbar"> 後台 </router-link>
+            <router-link class="nav-link" to="/videos" @click="closeNavbar"> 看片領券 </router-link>
+            <router-link class="nav-link" to="/coupons" @click="closeNavbar"> 我的優惠券 </router-link>
           </div>
 
           <!-- 使用者資訊 -->
@@ -87,3 +105,66 @@ export default {
     <router-view />
   </div>
 </template>
+
+<style scoped>
+.retro-navbar {
+  background-color: var(--retro-primary);
+  border-bottom: 4px solid var(--retro-dark);
+  box-shadow: 0 4px 0px var(--retro-dark);
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+.retro-brand {
+  font-family: var(--retro-font-display, 'VT323', monospace);
+  font-size: 2.2rem;
+  color: var(--retro-bg) !important;
+  text-shadow: 3px 3px 0px var(--retro-dark);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.brand-icon {
+  filter: drop-shadow(2px 2px 0px var(--retro-dark));
+}
+
+.nav-link {
+  font-family: var(--retro-font-mono, 'Courier New', Courier, monospace);
+  font-weight: 900;
+  color: var(--retro-bg) !important;
+  text-transform: uppercase;
+  margin: 0 5px;
+  padding: 8px 15px !important;
+  border: 2px solid transparent;
+  transition: all 0.1s;
+}
+
+.nav-link:hover, .nav-link.router-link-active {
+  color: var(--retro-dark) !important;
+  background-color: var(--retro-accent);
+  border: 2px solid var(--retro-dark);
+  box-shadow: 4px 4px 0px var(--retro-dark);
+  transform: translate(-2px, -2px);
+}
+
+/* 漢堡選單按鈕 (Mobile Navbar Toggler) */
+.navbar-toggler {
+  background-color: var(--retro-accent);
+  border: 3px solid var(--retro-dark) !important;
+  border-radius: 0;
+  padding: 8px 10px;
+  box-shadow: 4px 4px 0px var(--retro-dark);
+  transition: all 0.1s;
+}
+
+.navbar-toggler:active, .navbar-toggler[aria-expanded="true"] {
+  background-color: var(--retro-accent);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--retro-dark);
+}
+
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: 4px 4px 0px var(--retro-dark);
+}
+</style>

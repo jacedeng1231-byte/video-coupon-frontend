@@ -1,7 +1,9 @@
 <script>
 import api from "../api/api";
+import PageTitle from "../components/PageTitle.vue";
 
 export default {
+  components: { PageTitle },
   data() {
     return {
       coupons: [],
@@ -82,10 +84,10 @@ export default {
 
 <template>
   <div class="container mt-4">
-    <h2 class="mb-4">優惠券管理</h2>
+    <PageTitle title="優惠券管理" subtitle="COUPON MANAGEMENT" />
 
     <!-- 新增 / 修改 表單 -->
-    <div class="card p-3 mb-4 shadow-sm">
+    <div class="card p-3 mb-4">
       <h5>{{ editingCoupon ? "修改優惠券" : "新增優惠券" }}</h5>
       <div v-if="!editingCoupon">
         <input
@@ -98,7 +100,7 @@ export default {
           placeholder="優惠碼"
           v-model="newCoupon.code"
         />
-        <label class="form-label small text-muted">到期日</label>
+        <label class="form-label small opacity-75">到期日</label>
         <input
           type="date"
           class="form-control mb-2"
@@ -125,7 +127,7 @@ export default {
           placeholder="優惠碼"
           v-model="editingCoupon.code"
         />
-        <label class="form-label small text-muted">到期日</label>
+        <label class="form-label small opacity-75">到期日</label>
         <input
           type="date"
           class="form-control mb-2"
@@ -194,7 +196,7 @@ export default {
             </td>
           </tr>
           <tr v-if="coupons.length === 0">
-            <td colspan="5" class="text-center text-muted">目前無優惠券</td>
+            <td colspan="6" class="text-center opacity-75">目前無優惠券</td>
           </tr>
         </tbody>
       </table>

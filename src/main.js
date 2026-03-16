@@ -6,6 +6,9 @@ import router from "./router"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle.min.js"
 
+// Custom Retro Pop Global Styles
+import "./style.css"
+
 createApp(App)
   .use(router)
   .mount("#app")

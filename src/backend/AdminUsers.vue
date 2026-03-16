@@ -1,8 +1,8 @@
 <template>
   <div class="container mt-4">
-    <h2 class="mb-4">👥 會員管理 (測試工具)</h2>
+    <PageTitle title="會員管理" subtitle="USER MANAGEMENT (TEST)" />
 
-    <div class="card shadow-sm">
+    <div class="card p-3 mb-4">
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
@@ -42,7 +42,7 @@
               </td>
             </tr>
             <tr v-if="users.length === 0">
-              <td colspan="3" class="text-center text-muted py-5">
+              <td colspan="3" class="text-center opacity-75 py-5">
                 <div class="mb-2 fs-2">📭</div>
                 目前暫無會員資料
               </td>
@@ -56,8 +56,10 @@
 
 <script>
 import api from "../api/api";
+import PageTitle from "../components/PageTitle.vue";
 
 export default {
+  components: { PageTitle },
   data() {
     return {
       users: [],

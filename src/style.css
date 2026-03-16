@@ -1,11 +1,26 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* --- RETRO POP THEME --- */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+:root {
+  /* Retro Pop Color Palette */
+  --retro-bg: #FFF4D6;      /* Cream */
+  --retro-primary: #018AC8; /* Vibrant Blue */
+  --retro-accent: #FD540B;  /* Vibrant Orange */
+  --retro-dark: #1A1A1A;    /* Almost Black for high contrast borders/text */
+  --retro-text: #1A1A1A;
+  --retro-text-light: #FFF4D6;
+  --retro-danger: #e91e63;
+  --retro-success: #00c853;
+  
+  --retro-font-mono: 'Courier New', Courier, monospace;
+  --retro-font-display: 'VT323', monospace;
+
+  font-family: var(--retro-font-mono);
+  line-height: 1.5;
+  font-weight: bold;
+
+  color-scheme: light;
+  color: var(--retro-text);
+  background-color: var(--retro-bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,67 +28,192 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  /* Cream background with subtle dotted grid Pattern */
+  background-color: var(--retro-bg);
+  background-image: radial-gradient(var(--retro-primary) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1, h3, h4, h5, h6 {
+  font-family: var(--retro-font-display);
+  letter-spacing: 2px;
+  color: var(--retro-primary);
+  text-shadow: 2px 2px 0px var(--retro-accent);
+  text-transform: uppercase;
+  font-weight: normal;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+h2 {
+  font-family: var(--retro-font-display);
+  letter-spacing: 2px;
+  color: var(--retro-primary);
+  text-transform: uppercase;
+  font-weight: normal;
 }
 
-.card {
-  padding: 2em;
+a {
+  font-weight: 900;
+  color: var(--retro-primary);
+  text-decoration: none;
+  transition: all 0.1s;
 }
 
+a:hover {
+  color: var(--retro-accent);
+}
+
+/* --- OVERRIDE BOOTSTRAP DEFAULTS --- */
+
+/* App Container */
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Retro Pop Card / Panel style */
+.card, .bg-light, .bg-white {
+  background-color: var(--retro-bg) !important;
+  color: var(--retro-text) !important;
+  border: 4px solid var(--retro-primary) !important;
+  border-radius: 0px !important;
+  box-shadow: 6px 6px 0px var(--retro-primary) !important;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Buttons (Memphis / Arcade Style) */
+.btn {
+  font-family: var(--retro-font-mono) !important;
+  font-weight: 900 !important;
+  border-radius: 0px !important;
+  text-transform: uppercase;
+  border: 3px solid var(--retro-dark) !important;
+  box-shadow: 4px 4px 0px var(--retro-dark) !important;
+  transition: all 0.1s ease-in-out !important;
+  letter-spacing: 1px;
+}
+
+.btn:active {
+  transform: translate(4px, 4px) !important;
+  box-shadow: 0px 0px 0px var(--retro-dark) !important;
+}
+
+.btn-primary {
+  background-color: var(--retro-primary) !important;
+  color: var(--retro-text-light) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--retro-accent) !important;
+  border-color: var(--retro-dark) !important;
+}
+
+.btn-outline-primary {
+  background-color: var(--retro-bg) !important;
+  color: var(--retro-primary) !important;
+  border-color: var(--retro-primary) !important;
+  box-shadow: 4px 4px 0px var(--retro-primary) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--retro-primary) !important;
+  color: var(--retro-text-light) !important;
+}
+
+.btn-success {
+  background-color: var(--retro-success) !important;
+  color: var(--retro-dark) !important;
+}
+
+.btn-outline-secondary {
+  background-color: #fff !important;
+  color: var(--retro-dark) !important;
+  border-color: var(--retro-dark) !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--retro-dark) !important;
+  color: #fff !important;
+}
+
+.btn-danger, .btn-outline-danger {
+  background-color: var(--retro-bg) !important;
+  color: var(--retro-danger) !important;
+  border-color: var(--retro-danger) !important;
+  box-shadow: 4px 4px 0px var(--retro-danger) !important;
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--retro-danger) !important;
+  color: #fff !important;
+}
+
+/* Tables */
+.table {
+  color: var(--retro-text) !important;
+  border: 3px solid var(--retro-primary) !important;
+  background-color: var(--retro-bg) !important;
+  box-shadow: 6px 6px 0px var(--retro-primary);
+}
+
+.table th, .table td {
+  border-bottom: 2px solid var(--retro-primary) !important;
+}
+
+.table-light, .table thead th {
+  background-color: var(--retro-primary) !important;
+  color: var(--retro-text-light) !important;
+  font-family: var(--retro-font-display);
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  border-bottom: 3px solid var(--retro-dark) !important;
+  text-shadow: none;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(1, 138, 200, 0.1) !important;
+}
+
+/* Inputs */
+.form-control {
+  background-color: #fff !important;
+  color: var(--retro-dark) !important;
+  border: 3px solid var(--retro-primary) !important;
+  border-radius: 0px !important;
+  font-family: var(--retro-font-mono) !important;
+  font-weight: bold;
+  box-shadow: 4px 4px 0px rgba(1, 138, 200, 0.2) !important;
+  transition: all 0.2s;
+}
+
+.form-control:focus {
+  background-color: #fff !important;
+  border-color: var(--retro-accent) !important;
+  box-shadow: 4px 4px 0px var(--retro-accent) !important;
+  outline: none;
+}
+
+/* Badges */
+.badge {
+  font-family: var(--retro-font-display);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  border: 2px solid var(--retro-dark);
+  box-shadow: 2px 2px 0px var(--retro-dark);
+  border-radius: 0;
+  text-transform: uppercase;
+  color: var(--retro-text-light) !important;
+  font-weight: normal;
+  text-shadow: none;
+}
+
+.badge.bg-success {
+  background-color: var(--retro-success) !important;
+  color: var(--retro-dark) !important;
+}
+.badge.bg-info {
+  background-color: var(--retro-primary) !important;
 }
