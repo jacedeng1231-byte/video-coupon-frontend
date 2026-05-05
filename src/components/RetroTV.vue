@@ -1,43 +1,44 @@
 <template>
-  <div class="video-card">
+  <div class="video-item-card">
     <!-- Video Player Area -->
-    <div class="video-wrapper">
-      <div :id="'player-' + video._id" class="player"></div>
+    <div class="video-item-player-container">
+      <div :id="'player-' + video._id" class="video-item-player"></div>
     </div>
     
     <!-- Info & Actions Area -->
-    <div class="video-info">
-      <h3 class="video-title">{{ video.title }}</h3>
-      
-      <div class="status-badges mb-3">
-        <span v-if="video.isClaimed" class="badge bg-success">✅ 獎勵已領取</span>
-        <span v-else-if="watched" class="badge bg-primary">✨ 可領取獎勵</span>
+    <div class="video-item-content">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <h3 class="video-item-title">{{ video.title }}</h3>
+        <div class="video-item-badge-container">
+          <span v-if="video.isClaimed" class="badge bg-success">已領取</span>
+          <span v-else-if="watched" class="badge bg-primary">可領取</span>
+        </div>
       </div>
-
-      <div class="action-buttons">
+      
+      <div class="video-item-actions mt-3">
         <button 
           v-if="!video.isClaimed"
-          class="btn btn-lg w-100 fw-bold shadow-sm"
-          :class="watched ? 'btn-success' : 'btn-secondary disabled'"
+          class="btn w-100 fw-bold"
+          :class="watched ? 'btn-primary' : 'btn-outline-secondary disabled-style'"
           @click="watched ? $emit('claim') : null"
         >
-          <span v-if="watched">🎁 領取專屬優惠券</span>
-          <span v-else>🔒 觀看影片解鎖優惠</span>
+          <span v-if="watched">🎁 點我領取優惠券</span>
+          <span v-else>觀看影片解鎖優惠</span>
         </button>
         
         <button 
           v-else
-          class="btn btn-lg w-100 btn-outline-secondary fw-bold"
+          class="btn w-100 btn-outline-secondary fw-bold"
           disabled
         >
-          🎉 此獎勵已領取
+          已領取此獎勵
         </button>
       </div>
       
       <!-- Only for Testing/Dev: Simulate Watch Button -->
-      <div class="mt-3 text-center" v-if="!watched && !video.isClaimed">
-        <button class="btn btn-sm btn-outline-secondary" @click="$emit('simulateWatch')">
-          (測試用) 模擬觀看完畢
+      <div class="mt-2 text-center" v-if="!watched && !video.isClaimed">
+        <button class="btn btn-sm btn-link text-muted text-decoration-none" @click="$emit('simulateWatch')">
+          <small>(測試) 直接完成觀看</small>
         </button>
       </div>
 
@@ -55,64 +56,60 @@ export default {
 </script>
 
 <style scoped>
-.video-card {
+.video-item-card {
   width: 100%;
-  max-width: 100%; /* Ensure it does not bleed off mobile screens */
   background-color: var(--app-surface);
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s ease;
 }
 
-.video-wrapper {
+.video-item-player-container {
   width: 100%;
   aspect-ratio: 16 / 9;
   background-color: #000;
   position: relative;
 }
 
-.video-wrapper iframe,
-.video-wrapper .player {
+.video-item-player {
   position: absolute;
   top: 0;
   left: 0;
   width: 100% !important;
   height: 100% !important;
   border: none;
-  max-width: 100%;
 }
 
-.video-info {
-  padding: 20px;
+.video-item-content {
+  padding: 16px;
 }
 
-.video-title {
-  font-size: 1.25rem;
+.video-item-title {
+  font-size: 1.05rem;
   color: var(--app-text-main);
-  font-weight: 800;
-  margin-bottom: 8px;
+  font-weight: 700;
+  margin: 0;
   line-height: 1.4;
+  flex: 1;
+  padding-right: 8px;
 }
 
-.status-badges {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
+.video-item-badge-container {
+  flex-shrink: 0;
 }
 
-.action-buttons {
-  margin-top: 10px;
+.disabled-style {
+  background-color: #F2F2F7 !important;
+  color: #AEAEB2 !important;
+  border-color: transparent !important;
+  opacity: 1 !important;
+  cursor: default;
 }
 
-.btn-secondary.disabled {
-  background-color: #EAEAEA !important;
-  color: #999 !important;
-  opacity: 1;
-  cursor: not-allowed;
-  box-shadow: none !important;
+.btn-link {
+  font-size: 0.8rem;
 }
 </style>

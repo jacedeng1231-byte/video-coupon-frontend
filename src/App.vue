@@ -25,13 +25,11 @@ export default {
     closeNavbar() {
       const navbarCollapse = document.getElementById("navbarNav");
       if (navbarCollapse && navbarCollapse.classList.contains("show")) {
-        // Use Bootstrap's Collapse API to hide it properly
         if (window.bootstrap) {
           const bsCollapse = window.bootstrap.Collapse.getInstance(navbarCollapse) 
             || new window.bootstrap.Collapse(navbarCollapse, { toggle: false });
           bsCollapse.hide();
         } else {
-          // Fallback if bootstrap JS is not globally available
           navbarCollapse.classList.remove("show");
         }
       }
@@ -43,7 +41,7 @@ export default {
 <template>
   <!-- Global Loading State -->
   <div v-if="!isAuthReady" class="global-loading">
-    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+    <div class="spinner-border text-primary" role="status" style="width: 2.5rem; height: 3rem;">
       <span class="visually-hidden">載入中...</span>
     </div>
     <p class="mt-3 text-muted fw-bold">連線至 LINE 活動中心...</p>
@@ -52,21 +50,26 @@ export default {
   <div v-else class="app-layout">
     <!-- Top App Bar -->
     <header class="top-bar">
-      <div class="container d-flex justify-content-between align-items-center h-100">
+      <div class="container-fluid d-flex justify-content-between align-items-center h-100 px-3">
+        <!-- Placeholder for left alignment balance -->
+        <div class="top-bar-side"></div>
+
         <router-link class="brand-title" to="/">
-          LINE 活動中心
+          活動中心
         </router-link>
 
-        <!-- 使用者資訊與後台入口 -->
-        <router-link v-if="user" to="/dashboard" class="user-profile text-decoration-none" title="前往後台管理">
-          <span class="user-name d-none d-sm-inline">{{ user.displayName }}</span>
-          <img 
-            v-if="user.pictureUrl"
-            :src="user.pictureUrl" 
-            class="user-avatar" 
-            alt="User Avatar"
-          />
-        </router-link>
+        <!-- User profile icon or admin link -->
+        <div class="top-bar-side d-flex justify-content-end">
+          <router-link v-if="user" to="/dashboard" class="user-profile-link" title="前往後台管理">
+            <img 
+              v-if="user.pictureUrl"
+              :src="user.pictureUrl" 
+              class="user-avatar-small" 
+              alt="User Avatar"
+            />
+            <div v-else class="user-avatar-placeholder"></div>
+          </router-link>
+        </div>
       </div>
     </header>
 
@@ -80,7 +83,7 @@ export default {
       <div class="container d-flex justify-content-around align-items-center h-100">
         <router-link class="tab-item" to="/" exact-active-class="tab-active">
           <span class="tab-icon">🎬</span>
-          <span class="tab-label">看片</span>
+          <span class="tab-label">看片活動</span>
         </router-link>
 
         <router-link class="tab-item" to="/member" active-class="tab-active">
@@ -90,7 +93,7 @@ export default {
 
         <router-link class="tab-item" to="/coupons" active-class="tab-active">
           <span class="tab-icon">🎟️</span>
-          <span class="tab-label">優惠券</span>
+          <span class="tab-label">我的優惠券</span>
         </router-link>
       </div>
     </nav>
@@ -118,8 +121,8 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding-top: 60px; /* Space for Top Bar */
-  padding-bottom: 70px; /* Space for Bottom Tab Bar */
+  padding-top: 54px; /* Native feel header height */
+  padding-bottom: 74px; /* Standard tab bar height */
 }
 
 /* --- Top Bar --- */
@@ -128,38 +131,42 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 54px;
   background-color: var(--app-surface);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-bottom: 1px solid var(--app-border);
   z-index: 1000;
+}
+
+.top-bar-side {
+  width: 40px; /* Balance both sides */
 }
 
 .brand-title {
   font-family: var(--font-sans);
-  font-weight: 800;
-  font-size: 1.2rem;
+  font-weight: 700;
+  font-size: 1.05rem;
   color: var(--app-text-main);
   text-decoration: none;
+  letter-spacing: -0.2px;
 }
 
-.user-profile {
+.user-profile-link {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
-.user-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--app-text-muted);
-}
-
-.user-avatar {
-  width: 36px;
-  height: 36px;
+.user-avatar-small {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--app-border);
+}
+
+.user-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--app-border);
 }
 
 /* --- Main Content --- */
@@ -173,11 +180,11 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: 74px;
   background-color: var(--app-surface);
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  border-top: 1px solid var(--app-border);
   z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom); /* For iPhone notch handling */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .tab-item {
@@ -189,19 +196,22 @@ export default {
   height: 100%;
   text-decoration: none;
   color: var(--app-text-muted);
-  transition: color 0.2s;
+  transition: all 0.2s;
+  padding-top: 6px;
 }
 
 .tab-icon {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin-bottom: 2px;
-  filter: grayscale(100%) opacity(0.6);
+  filter: grayscale(100%);
+  opacity: 0.6;
   transition: all 0.2s;
 }
 
 .tab-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .tab-active {
@@ -209,7 +219,8 @@ export default {
 }
 
 .tab-active .tab-icon {
-  filter: grayscale(0%) opacity(1);
+  filter: grayscale(0%);
+  opacity: 1;
   transform: translateY(-2px);
 }
 </style>

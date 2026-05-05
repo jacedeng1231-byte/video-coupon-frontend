@@ -2,85 +2,68 @@
   <div class="container mt-4">
     <PageTitle title="我的優惠券" subtitle="MY COUPONS" />
 
-    <div v-if="loading" class="text-center mt-5">
-      <div class="spinner-border text-success"></div>
-      <p>載入優惠券中...</p>
+    <div v-if="loading" class="text-center mt-5 py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-3 text-muted fw-bold">載入優惠券中...</p>
     </div>
 
     <div v-else>
-      <div class="row">
+      <div class="row g-3" v-if="coupons.length > 0">
         <div
           v-for="c in coupons"
           :key="c._id"
-          class="col-12 col-md-6 col-lg-4 mb-4"
+          class="col-12 col-md-6"
         >
-          <div class="card coupon-card h-100">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title fw-bold">
-                {{ c.couponId.title }}
-              </h5>
+          <div class="coupon-ticket h-100" :class="{ 'is-used': c.isUsed || isExpired(c) || isSoldOut(c) }">
+            <div class="coupon-ticket-main">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <h5 class="coupon-title">{{ c.couponId.title }}</h5>
+                <span v-if="c.isUsed" class="badge bg-secondary">已使用</span>
+                <span v-else-if="isExpired(c)" class="badge bg-danger">已過期</span>
+                <span v-else-if="isSoldOut(c)" class="badge bg-danger">已用完</span>
+                <span v-else class="badge bg-primary">未使用</span>
+              </div>
 
-              <p class="card-text mb-1">
-                <span class="fs-6 text-muted">折扣碼</span><br/>
-                <code class="fs-4 d-block mt-2 coupon-code">{{ c.couponId.code }}</code>
-              </p>
+              <div class="coupon-code-box">
+                <span class="coupon-code-label">折扣碼</span>
+                <code class="coupon-code-value">{{ c.couponId.code }}</code>
+              </div>
+            </div>
 
-              <p class="small mb-3 text-muted">
-                到期日：
-                {{ new Date(c.couponId.expireDate).toLocaleDateString() }}
-              </p>
+            <div class="coupon-ticket-divider">
+              <div class="dot-left"></div>
+              <div class="dot-right"></div>
+            </div>
 
-              <div class="ticket-divider"></div>
+            <div class="coupon-ticket-footer">
+              <div class="coupon-meta">
+                <span class="coupon-expiry">效期至 {{ formatDate(c.couponId.expireDate) }}</span>
+              </div>
 
-              <div class="mt-auto">
-
-              <!-- 已使用狀態 -->
               <button
-                v-if="c.isUsed"
-                class="btn btn-secondary w-100 mt-4"
-                disabled
-              >
-                已使用
-              </button>
-
-              <!-- 已過期狀態 -->
-              <button
-                v-else-if="new Date(c.couponId.expireDate) < new Date()"
-                class="btn btn-danger w-100 mt-3"
-                disabled
-              >
-                已過期
-              </button>
-
-              <!-- 已用完狀態 (次數上限) -->
-              <button
-                v-else-if="
-                  c.couponId.maxUse > 0 &&
-                  c.couponId.usedCount >= c.couponId.maxUse
-                "
-                class="btn btn-danger w-100 mt-3"
-                disabled
-              >
-                已被用完
-              </button>
-
-              <!-- 可使用狀態 -->
-              <button
-                v-else
-                class="btn btn-success w-100"
+                v-if="!c.isUsed && !isExpired(c) && !isSoldOut(c)"
+                class="btn btn-primary w-100 mt-3"
                 @click="useCoupon(c.couponId._id)"
               >
-                使用優惠券
+                立即使用
               </button>
-              </div>
+              <button
+                v-else
+                class="btn btn-outline-secondary w-100 mt-3 disabled-btn"
+                disabled
+              >
+                {{ getDisabledText(c) }}
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="coupons.length === 0" class="text-center mt-5 opacity-75">
-        <h5>尚未獲得任何折價券</h5>
-        <p>可以前往影片中心觀看影片來獲得優惠券喔！</p>
+      <div v-else class="text-center mt-5 py-5 opacity-75">
+        <div class="fs-1 mb-3">🎫</div>
+        <h5>目前還沒有優惠券喔</h5>
+        <p class="text-muted">快去參加看片活動領取吧！</p>
+        <router-link to="/" class="btn btn-outline-primary mt-3">前往看片</router-link>
       </div>
     </div>
   </div>
@@ -123,6 +106,25 @@ export default {
         alert(err.response?.data?.message || "使用失敗");
       }
     },
+    isExpired(c) {
+      return new Date(c.couponId.expireDate) < new Date();
+    },
+    isSoldOut(c) {
+      return c.couponId.maxUse > 0 && c.couponId.usedCount >= c.couponId.maxUse;
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleDateString('zh-TW', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    },
+    getDisabledText(c) {
+      if (c.isUsed) return "已使用完畢";
+      if (this.isExpired(c)) return "票券已過期";
+      if (this.isSoldOut(c)) return "名額已用完";
+      return "無法使用";
+    }
   },
   mounted() {
     this.loadCoupons();
@@ -131,66 +133,102 @@ export default {
 </script>
 
 <style scoped>
-.coupon-card {
-  border-radius: 16px;
+.coupon-ticket {
+  background-color: var(--app-surface);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  background-color: var(--app-surface) !important;
   box-shadow: var(--shadow-md);
-  border: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+  border: 1px solid var(--app-border);
 }
 
-.coupon-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+.coupon-ticket.is-used {
+  opacity: 0.7;
+  filter: grayscale(0.5);
+  box-shadow: none;
 }
 
-.card-title {
-  color: var(--app-text-main);
+.coupon-ticket-main {
+  padding: 20px;
+  flex: 1;
+}
+
+.coupon-title {
   font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--app-text-main);
+  line-height: 1.4;
 }
 
-.coupon-code {
-  color: var(--app-primary);
-  background: #F8F9FA;
-  padding: 12px;
+.coupon-code-box {
+  background-color: #F8F9FA;
   border-radius: 8px;
-  font-family: var(--font-sans);
-  font-weight: 700;
-  letter-spacing: 1px;
-  width: 100%;
-  text-align: center;
+  padding: 12px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: 1px dashed var(--app-border);
 }
 
-/* Add a subtle visual divider to mimic a ticket */
-.coupon-card .card-body {
-  position: relative;
+.coupon-code-label {
+  font-size: 0.7rem;
+  color: var(--app-text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-.ticket-divider {
+.coupon-code-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--app-primary);
+  margin-top: 4px;
+}
+
+/* Divider with punch-out holes */
+.coupon-ticket-divider {
+  height: 2px;
   border-top: 2px dashed var(--app-border);
-  margin: 16px -16px;
   position: relative;
+  margin: 0 12px;
 }
 
-.ticket-divider::before, .ticket-divider::after {
-  content: '';
+.dot-left, .dot-right {
   position: absolute;
   top: -10px;
   width: 20px;
   height: 20px;
   background-color: var(--app-bg);
   border-radius: 50%;
+  border: 1px solid var(--app-border);
 }
 
-.ticket-divider::before {
-  left: -26px;
-  box-shadow: inset -1px 0 0 rgba(0,0,0,0.02);
+.dot-left { left: -24px; }
+.dot-right { right: -24px; }
+
+.coupon-ticket-footer {
+  padding: 16px 20px 20px 20px;
 }
 
-.ticket-divider::after {
-  right: -26px;
-  box-shadow: inset 1px 0 0 rgba(0,0,0,0.02);
+.coupon-meta {
+  display: flex;
+  justify-content: center;
+}
+
+.coupon-expiry {
+  font-size: 0.75rem;
+  color: var(--app-text-muted);
+  font-weight: 500;
+}
+
+.disabled-btn {
+  background-color: #F2F2F7 !important;
+  color: #AEAEB2 !important;
+  border-color: transparent !important;
+  opacity: 1 !important;
 }
 </style>
